@@ -87,6 +87,13 @@ int main() {
     double timeSpent2 = (double)(end - begin) / CLOCKS_PER_SEC;
     printf("That for loop took %f seconds to complete\n", timeSpent2);
     printf("Loop 2 was %f times faster than Loop 1\n", (double)(timeSpent1/timeSpent2));
+
+
+    // Observing Truncation.
+    float y = 10.2;
+    int x;
+    x = 1.9 + 10.1;
+    printf("\nx = %d\n", x);
     
     return 0;
 }
