@@ -9,4 +9,7 @@ extern int my_global_variable;
 // Function to print my_global_variable.
 void print_global_var();
 
+// Function to show stack.
+int showstack(int i, int j);
+
 #endif
