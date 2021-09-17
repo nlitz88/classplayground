@@ -25,5 +25,9 @@ int showstack(int i, int j) {
 
     // Note how j actually gets pushed before i.
 
+    // ALSO, when running this program multiple times, notice how the addresses of the variables on the stack
+    // change from run-to-run. This is due to ADDRESS SPACE LAYOUT RANDOMIZATION being enabled in linux.
+    // This is for added security. Can disable if desired though, as can make debugging more difficult.
+
     return 0;
 }
