@@ -22,6 +22,36 @@ char *readFile(int byteCount) {
 }
 
 
+// Sample function to demonstrate perhaps more performant way of dynamically allocating memory using a memory map!
+int mymap( char val ) {
+    // Local variables
+    int fh, i;
+    char *ptr;
+    // Open the file and "map" 20 bytes of it to memory
+    // if ( (fh = open( "mmap.dat", O_CREAT|O_RDWR )) == 0 ) {
+    //     printf( "Error in open [%s], aborting\n", strerror(errno) );
+    //     return( -1 );
+    // }
+    // if ( (ptr = mmap( NULL, 20, PROT_READ|PROT_WRITE, MAP_SHARED, fh, 0 )) == (void *)-1 ) {
+    //     printf( "Error in map [%s], aborting\n", strerror(errno) );
+    //     return( -1 );
+    // }
+    // Add the values
+    for (i=0; i<20; i++) {
+        ptr[i] = val; // Replicate the value into the file
+    }
+    // "free" the mapped memory, close the file
+    munmap( ptr, 20 );
+    close( fh );
+    return( 0 );
+}
+
+
+int pointerTesting() {
+    char hi[6] = {'h','e','l','l','o','\0'};char*p, **dp;p= &(hi[0]);dp= &p;printf("%c %c\n", *p, **dp);printf("%p %p %p\n",p, *dp,hi);p+=1;printf("%c %c\n", *p, **dp);printf("%p %p %p\n",p, *dp,hi);*dp+=2;printf("%c %c\n", *p, **dp);printf("%p %p %p\n",p, *dp,hi);return 0;
+}
+
+
 int main() {
 
     // Here is an example of pointer type casting.
@@ -69,10 +99,13 @@ int main() {
     // like its size and maybe other properties. Thus, free knows how many bytes it can release or
     // make "up for grabs" when called.
 
-    // Once the memory at myBuf has been deallocated, it is good practice to null out the pointer
-    // to avoid accidentally using that old address again.
-    myBuf = NULL; 
+    // We'd rather cause a segmentation fault than corrupting memory unknowingly. When a pointer
+    // with NULL as the address is attempted to be dereferenced, a segmentation fault is caused,
+    // which throws an exception and execution stops. This is prefereable over causing unpredictable
+    // program behavior.
+    myBuf = NULL;
 
+    pointerTesting();
 
     return 0;
 }

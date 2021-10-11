@@ -5,7 +5,7 @@ int main() {
     // STRUCTS
 
     // As far as I can gather right now:
-    // When compiler reaches this struct definition, it will generate assembly instructions
+    // When compiler reaches this struct DEFINTION, it will generate assembly instructions
     // to allocate memory on the stack for each variable contained within the struct.
     // Basically, the struct gets it's own "block" of memory where each of its elements are allocated.
 
@@ -18,7 +18,7 @@ int main() {
     // PADDING between elements. Therefore, the elements aren't necessarily contiguous.
 
     // DEFINITION of a struct called "user"
-    // struct keyword <struct tag>
+    // struct user <struct tag>
 
     // This is a struct declaration. This is basically just a reference that the compiler uses to determine
     // what kind of assembly instructions it'll need to generate to allocate enough memory for a struct
