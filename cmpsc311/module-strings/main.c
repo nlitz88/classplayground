@@ -40,11 +40,38 @@ int main() {
     // Meaning that, when strcat operates on it, for instance, it will know that it can start copying bytes where that null terminator is. 
     // NOTE: The string that is being concatenated, its null terminator will also get tacked on, and act as the new null terminator for the whole string!
     strcat(fullName, myName);
-    strcat(fullName, lastName);
+    // For this second concatenation here, I'll use the "safer" version, that only copies a maximum of 20 bytes to avoid any buffer overflow.
+    strncat(fullName, lastName, 25 - strlen(fullName));
     
     // How is strcat any different from strcpy?
+    //      strcat looks for the null terminator in a provided string, and will begin copying the bytes of the second string provided
+    //      at the index the null terminator was at. The resulting string will only have a null terminator if the string be
+    //      concatenated has a null terminator.
 
-    // Or, can use a safer strcat, that at most will only tack-on "n" bytes after the 
+    // String compare...
+
+    // Searching through strings.
+    //      Can use strchar to search for a character in a string return the address of the first character to match that value in the string.
+    //      Can use strstr to search for string within another string (substring). Also functions to do these searches starting from right, instead of left.
+
+    // Parsing strings.
+    //      Often times, we want to extract data from strings, especially when we strategically organize our data into strings
+    //      for storage.
+    //      Can use scanf to do this. It takes in the string you want to parse, you specify which types and what values you want, and then where to store those values (references).
+    //      It will return the number of arguments it was successful in parsing.
+
+    char name[20];
+    int age, birthyear;
+    char testData[] = "Nathan 21 2001";
+    scanf(testData,"%s %d %d", name, &age, &birthyear);
+    
+    // Example of tokenized data.
+    char csvTestData[] = "Nathan,Litzinger,Student,Ryan,Litzinger,Student,Kevin,Litzinger,Employee";
+    // How can we read tokenized data of unknown count? Can use strtok.
+    // This function will, provided an address of a string, return the string value until a specified delimmiter.
+
+    // Here is an example where we are going to parse out each tokenized value from csvTestData.
+    // char *nptr;
 
 
     return 0;
