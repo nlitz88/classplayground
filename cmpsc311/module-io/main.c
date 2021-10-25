@@ -7,5 +7,8 @@ int main() {
     fgets(testString, 128, myFile);
     printf(testString);
 
+    printf("\n");
+
+    
     return 0;
 }
