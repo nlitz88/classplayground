@@ -29,3 +29,12 @@ clean :
 # Note that a useful addition might be to make a variable containing all object
 # file names such that you wouldn't have to update all instances of listing the
 # object files.
+
+# The prequisite for running unittests is the unittest executable being linked.
+# If it's not linked/doesn't exist, the make will run the commands under the unittest rule to generate the executable.
+runtests : unittest
+	./unittest
+
+unittest : main.o test.o
+	$(CC) $^ -o $@
+
