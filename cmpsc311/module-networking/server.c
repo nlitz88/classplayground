@@ -56,32 +56,32 @@ int main() {
         inet_len = sizeof(clientSockAddr);
         // First, call accept (blocking) to scan the listening connection queue for new incoming connnection requests.
         clientsock = accept(lsock, (struct sockaddr *)&clientSockAddr, &inet_len);
-        inet_pton(AF_INET, clientIPString, &clientSockAddr);
+        inet_ntop(AF_INET, &(clientSockAddr.sin_addr), clientIPString, sizeof(clientSockAddr));
         if(clientsock == -1) {
-            printf("Failed to accept new client at %s", clientIPString);
+            printf("Failed to accept new client at %s\n", clientIPString);
             close(lsock);
             return -1;
         }
-        printf("Established connection with new client %s", clientIPString);
+        printf("Established connection with new client %s\n", clientIPString);
 
         // Next, read (reicv) data from the new connection.
         if(read(clientsock, &data, sizeof(data)) != sizeof(data)) {
-            printf("Error reading data from %s", clientIPString);
+            printf("Error reading data from %s\n", clientIPString);
             close(lsock);
             return -1;
         }
         data = ntohl(data);
-        printf("Received %d bytes from %s. Data: %d", (int)sizeof(data), clientIPString, data);
+        printf("Received %d bytes from %s. Data: %d\n", (int)sizeof(data), clientIPString, data);
         
         // Then, attempt to send some data back to the client. In this case, we'll just increment the data once and send it back.
         ++data;
         data = htonl(data);     // Need to convert it back to network ordering.
         if(write(clientsock, &data, sizeof(data)) != sizeof(data)) {
-            printf("Error sending data to %s", clientIPString);
+            printf("Error sending data to %s\n", clientIPString);
             close(lsock);
             return -1;
         }
-        printf("Sent %d bytes to %s.", (int)sizeof(data), clientIPString);
+        printf("Sent %d bytes to %s.\n", (int)sizeof(data), clientIPString);
 
         // Finally, close the connection to the client by closing the client socket.
         close(clientsock);

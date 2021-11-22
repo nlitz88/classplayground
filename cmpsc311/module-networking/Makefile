@@ -6,7 +6,7 @@ FLAGS = -Wall
 OBBJECT_FILES = client.o server.o
 EXECUTABLES = client server
 
-all : $(OBBJECT_FILES)
+all : $(EXECUTABLES)
 
 # Rule for building client executable.
 client : client.o
