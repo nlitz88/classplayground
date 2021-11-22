@@ -4,6 +4,7 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <netdb.h>
+#include <unistd.h>
 
 
 
@@ -108,6 +109,11 @@ int main(int argc, char **argv) {
         return -1;
     }
     
+    // If successful, can read and write data.
+    
+    // Finally, can close the socket.
+    close(sockfd);
+    sockfd = -1;
 
 
 
