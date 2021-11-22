@@ -25,7 +25,7 @@ int main() {
     // Create socket.
     int serversockfd = socket(AF_INET, SOCK_STREAM, 0);     // Instantiate a socket with AF_INET address family sockaddr instance, stream socket, and no explicitly specified protocol.
     if(serversockfd == -1) {
-        printf("Failed to create socket.\n");
+        printf("Failed to create client socket.\n");
         return -1;
     }
 
@@ -41,15 +41,15 @@ int main() {
     if(write(serversockfd, &data, sizeof(data)) != sizeof(data)) {
         printf("Error writing network data [%d]\n", data);
     }
-    printf("Successfully sent %d bytes to server. Data: [%d]", (int)sizeof(data), data);
+    printf("Successfully sent %d bytes to server. Data: [%d]\n", (int)sizeof(data), ntohl(data));
 
     // Then, attempt to read some data from the server. This is a blocking call, so execution will wait until the specified number of bytes
     // has been read.
     if(read(serversockfd, &data, sizeof(data)) != sizeof(data)) {
-        printf("Failed to read all %d bytes of data [%d]", (int)sizeof(data), data);
+        printf("Failed to read all %d bytes of data [%d]\n", (int)sizeof(data), data);
     }
     data = ntohl(data);           // Reinterpret the data written into the data buffer from the network read back to host byte ordering.
-    printf("Successfully read %d bytes from server. Data: [%d]", (int)sizeof(data), data);
+    printf("Successfully read %d bytes from server. Data: [%d]\n", (int)sizeof(data), data);
 
     // Then, close the connection using close on the socket.
     close(serversockfd);
