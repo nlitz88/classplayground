@@ -3,9 +3,16 @@
 CC = gcc
 LINK = gcc
 FLAGS = -Wall
+OBBJECT_FILES = client.o server.o
+EXECUTABLES = client server
+
+all : $(OBBJECT_FILES)
 
 # Rule for building client executable.
 client : client.o
+	$(LINK) $(FLAGS) $^ -o $@
+
+server : server.o
 	$(LINK) $(FLAGS) $^ -o $@
 
 # Pattern rule for object files.
@@ -13,7 +20,10 @@ client : client.o
 	$(CC) $(FLAGS) -c $< -o $@
 
 clean :
-	rm -f client.o
+	rm -f $(OBBJECT_FILES) $(EXECUTABLES)
 
 testclient : client
 	./client
+
+testserver : server
+	./server
