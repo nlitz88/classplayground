@@ -1,11 +1,16 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <arpa/inet.h>
+#include <sys/socket.h>
+#include <netdb.h>
 
 
 
 int main(int argc, char **argv) {
 
     // Define struct type in_addr instances for maintaining address information of the connections we want to make.
+    // SO: socket address structure maintains address information that defines the connection of that socket.
     struct sockaddr_in v4, sa;
     // Note that this "socket address structure" contains more than just solely the address. It contains the port as well,
     // and a field referencing what address family the address belongs to (IPv4, IPv6, UNIX address for internal use, etc.).
@@ -28,6 +33,50 @@ int main(int argc, char **argv) {
     printf("Server IP address from the socket address structure sa: %s\n", myServerIP);
 
     // Now, what if we want to use DNS to lookup the IP address of a particular host name?
+    char serverhostname[] = "mc1.nlitz.com";
+    char portString[] = "25565";
+    // Going to employ the POSIX operation "getaddrinfo"
+    // Need to first setup a hints structure to constrain the lookup process.
+    struct addrinfo hints;
+    struct addrinfo *results; // *resultPointer;   // Define pointers to resulting addrinfo structures returned,
+    // as well as a pointer to point to the next addrinfo structure in the linked list of addrinfo structures returned.
+    // Set up the hints structure for our client code.
+    memset(&hints, 0, sizeof(struct addrinfo));
+    hints.ai_family = AF_INET;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_flags = 0;
+    hints.ai_protocol = 0;
+    // Variable to track success of call.
+    int success;
+    // Finally, make call to getaddrinfo(). getaddrinfo will allocate and initialize a linked list of addrinfo structures
+    // one for each of the network addresses that matches the node and service arguments, limited by the restrictions
+    // specified via the hints structure! Returns a pointer to the beginning of that linked list.
+    // Note that the node == the hostname you are looking up and the service is the port string.
+    success = getaddrinfo(serverhostname, portString, &hints, &results);
+    if(success != 0) {
+        fprintf(stderr, "%s: %s\n", serverhostname, gai_strerror(success));
+        abort();
+    }
+    // If reaching this point, the lookup was successful. Just for fun, display the returned address.
+    char serverIPResult[INET_ADDRSTRLEN];
+    // NOTE: Here we perform a very interesting yet fundamental conversion. See, the POSIX getaddrinfo function
+    //       returns the head of an addrinfo linked list. These addrinfo struct instances contain pointers to 
+    //       sockaddr structures that contain generic address information. HOWEVER, we're interested in the
+    //       INTERNET variants of these sockaddr structures such that we can intepret the address information according
+    //       to IP. Therefore, we must cast the more generic sockaddr struct pointer to a socket internet address 
+    //       pointer (sockaddr_in). Then, a socket internet address instance contains an internet address,
+    //       I.e. an in_addr, called sin_addr, for socket internet address.
+    inet_ntop(AF_INET, &((struct sockaddr_in *)(results->ai_addr))->sin_addr, serverIPResult, INET_ADDRSTRLEN);
+    printf("The first IP address returned by the DNS lookup for %s was %s\n", serverhostname, serverIPResult);
+    freeaddrinfo(results); // releases memory associated with addrinfo linked list allocated by getaddrinfo.
+    
+
+
+
+
+
+
+
 
     return 0;
 }
