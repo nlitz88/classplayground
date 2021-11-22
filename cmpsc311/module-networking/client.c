@@ -34,7 +34,9 @@ int main(int argc, char **argv) {
 
     // Now, what if we want to use DNS to lookup the IP address of a particular host name?
     char serverhostname[] = "mc1.nlitz.com";
-    char portString[] = "25565";
+    uint16_t port = 25565;
+    char portString[16];
+    sprintf(portString, "%d", port);
     // Going to employ the POSIX operation "getaddrinfo"
     // Need to first setup a hints structure to constrain the lookup process.
     struct addrinfo hints;
@@ -69,7 +71,44 @@ int main(int argc, char **argv) {
     inet_ntop(AF_INET, &((struct sockaddr_in *)(results->ai_addr))->sin_addr, serverIPResult, INET_ADDRSTRLEN);
     printf("The first IP address returned by the DNS lookup for %s was %s\n", serverhostname, serverIPResult);
     freeaddrinfo(results); // releases memory associated with addrinfo linked list allocated by getaddrinfo.
+    // From here, the desired IP address could be recorded and used in the creation of a socket.
+    // In this example, however, I'll be connecting to a machine in the local network, and won't be using this address.
+
+    // Now, create a socket. Use socket() to create a new socket instance entry in the system open file table.
+    int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    // The first parameter is the address family, the second is the type of socket, and the third is a fiel to
+    // specify what protocol you want it to use for communication. 0 sticks with the default of the socket type.
+    if(sockfd == -1) {
+        printf("Error on socket creation \n");
+    }
+    // NOW, NOTE: actually creating the socket doesn't establish any sort of connection or anything.
+    // The next step is to set up a socket internet address structure (sockaddr_in) for a particular server we want to connect to.
+    // We defined one earlier, but just for the sake of continuity, we'll define one here.
+    char serverIPString[] = "192.168.0.82";
+    uint16_t serverPort = 8555;
+    struct sockaddr_in serversockaddr;
+    serversockaddr.sin_family = AF_INET;
+    if(inet_pton(AF_INET, serverIPString, &(serversockaddr.sin_addr)) == 0) {
+        return -1;
+    }
+    serversockaddr.sin_port = htons(serverPort);
+    // Note that when setting the socket internet address port, must use the htons function, or
+    // the HOST TO NETWORK SHORT function. What this function does is make sure that the number specified
+    // is stored using BIG ENDIAN ordering. This is used standardly such that both hosts or routers interpretting
+    // the packet frames can properly read the port, as they all agree on BIG ENDIAN, I guess.
+    // Also, htons used here (as opposed to htonl) because the port number is a short integer (16 bits).
+
+    // Finally, once the server's socket address structure is set up, we can attempt to initiate a connection
+    // to the server at that address, referencing the connection using our socket.
+    // What this will do (in the case of our stream socket) is perform a TCP connection with the computer we're
+    // trying to connect to and, if successful, associate that socket internet address structure with the socket provided
+    // such that the connection can be manipulated via the socket in the read/write/close system calls.
+    if(connect(sockfd, (const struct sockaddr *)&serversockaddr, sizeof(serversockaddr)) == -1) {
+        printf("Attempt to connect to %s failed.\n", serverIPString);
+        return -1;
+    }
     
+
 
 
 
