@@ -1,0 +1,24 @@
+#! /bin/bash
+
+# Search for all png files.
+find ./dir/ -name "*.png"
+
+# Generate quazi-png files.
+# x=0
+# while [[ x -lt 10 ]]; do
+#     touch ./dir/photo_0${x}.png
+#     ((x++))
+# done
+
+# Now, return all files that are ACTUALLY png files (check with "file" command)
+
+
+while [[ true ]]; do
+    echo "foo"
+    sleep 1
+done
+
+# We can creatively pipe an expression into bc to perform a calculation on the numbers in the string.
+# Basically, we can use echo to take the argument string we provide and write it to STDOUT (echo does this).
+# Then, we can use a pipe to "pipe" or forward the STDOUT of echo to the STDIN of bc.
+echo "5*3" | bc

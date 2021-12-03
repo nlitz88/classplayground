@@ -1,0 +1,4 @@
+#! /bin/bash
+
+# Exit with custom exit status provided as first argument.
+exit $1

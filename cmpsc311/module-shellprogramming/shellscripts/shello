@@ -5,5 +5,5 @@ echo Shello World
 greetz="Hello"  # Doesn't matter if you encapsulate the string in quotes or not.
 greeting2=Hi    # NOTE: No space between variable name, equals sign, and value.
 echo $USER    # Here we access the variable 
-echo ${USER}
+echo ${USER}_is_the_user
 echo ${greeting2}

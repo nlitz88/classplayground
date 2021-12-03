@@ -1,0 +1,11 @@
+#! /bin/bash
+
+# Traditional test syntax.
+age=$1
+test $age -ge 21 && echo "can drink!"
+test $? -eq 1 && echo "can't drink!" && exit 0
+
+# Can use shorthand test syntax with double brackets.
+[[ $age -gt 64 ]] && echo "Social Security time!"
+
+# Tests are a good way of streamlining running commands, but aren't necessarily aren't meant as a robust solution to conditional logic.

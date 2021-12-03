@@ -1,0 +1,15 @@
+#! /bin/bash
+
+# For fun, print out the number of arguments provided.
+echo "$# arguments provided"
+echo $1$1
+echo "[$2]"
+echo [$3]
+
+# Redirect to a file.
+# NOTE: > overwrites to a file, >> appends.
+echo "$@ " >> argsfile
+
+# Using pipes
+ls -l | sort -h
+

@@ -1,0 +1,27 @@
+#! /bin/bash
+
+# Example of conditional logic.
+# Note here that the condition is a list of consecutive tests arranged as you might need.
+# If the exit status of the test is zero, then the commands within that block run!
+age=21
+if [[ age -ge 21 ]]; then
+    echo "You're old enough to drink!"
+elif [[ age -ge 16 ]]; then
+    echo "You're old enough to drive!"
+else
+    echo "Too young!"
+fi
+
+# Here's a conditional loop example. Same principle at work; use a shorthand test to test
+# your conditions and then use the tests returned exit status to make looping decision.
+x=0
+while [[ $x -lt 20 ]]; do
+    echo "Value of x: $x"
+    ((x++))                     # Double parens indicates that we want to perform arithmetic.
+done
+
+# Here's a for loop.
+for a in A B C hello 4; do
+    echo "Current a: $a$a$a"
+done
+
