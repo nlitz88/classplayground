@@ -40,5 +40,18 @@ int main() {
     // cumbersome old declaration with the nasty syntax. For instance:
     some_type_of_func my_func_ptr2 = NULL;
 
+    /**
+     * STRUCTURE PADDING AND ALIGNMENT
+     */
+    struct user {
+        char first_initial;
+        char last_initial;
+        double balance;
+        int age;
+    };
+    // Define using named struct type, rather than using an anonymous struct type declaration each time.
+    struct user u1 = {'N', 'L', 30.25, 21};
+    struct user u2 = {'K', 'L', 400.17, 23};
+
     return 0;
 }
