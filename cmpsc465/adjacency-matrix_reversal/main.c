@@ -117,7 +117,8 @@ static inline uint8_t adjblk_bit_pose_from_col(vertexcounter col) {
 /**
  * @brief This function sets the value of the element at the xth row, yth column to the provided value.
  * 
- * @param matrix Matrix to update.
+ * @param matrix Matrix to update. This is okay to just be a copy of the pointer, as this function doesn't modify
+ * the matrix pointer itself at all.
  * @param x Row the element is in.
  * @param y Column the element is in.
  * @param value Value can be true/false == 1/0.
@@ -145,16 +146,53 @@ static inline void matrix_set_element(matrix matrix, vertexcounter x, vertexcoun
 
 }
 
+/**
+ * @brief This function returns the value at the xth row, yth column.
+ * 
+ * @param adj_matrix 
+ * @param x 
+ * @param y 
+ * @return true 
+ * @return false 
+ */
+static inline bool matrix_get_element(matrix adj_matrix, vertexcounter x, vertexcounter y) {
+
+    // First, get the adjency block from the column.
+    vertexcounter adjblk_num = adjblk_from_col(x);
+    // Use this to get the actual adjency block that we're working on.
+    adjblk *curr_adjblk = &(adj_matrix[y][adjblk_num]);
+    // Also get the position within the adjacency block.
+    uint8_t adjblk_bit_pos = adjblk_bit_pose_from_col(x);
+
+    // Now, create a bitmask to extract the value from the adjblk num. Just place a 1 amidst a bunch of zeroes at
+    // the proper position, bitwise AND it with the adjblk, then shift the value to the right (we don't even need
+    // to shift it in this case, as anything nonzero is true).
+    adjblk mask = 0x1 << (sizeof(adjblk) - 1 - adjblk_bit_pos);
+    return (bool)(*curr_adjblk & mask);
+
+}
+
+static inline void test_matrix_get_element() {
+
+    matrix adj_matrix = matrix_allocate(10);
+    matrix_set_element(adj_matrix, 1, 1, true);
+    assert(matrix_get_element(adj_matrix, 1, 1) == 1);
+    matrix_set_element(adj_matrix, 1, 1, false);
+    assert(matrix_get_element(adj_matrix, 1, 1) == 0);
+
+}
+
 
 int main() {
 
 // #ifdef TEST
     test_matrix_get_req_row_adjblks();
+    test_matrix_get_element();
 // #endif
 
-    matrix adj_matrix = matrix_allocate(10);
-    matrix_set_element(adj_matrix, 1, 1, true);
-    matrix_set_element(adj_matrix, 1, 1, false);
-    
+    // matrix adj_matrix = matrix_allocate(10);
+    // matrix_set_element(adj_matrix, 1, 1, true);
+    // matrix_set_element(adj_matrix, 1, 1, false);
+
     return 0;
 }
