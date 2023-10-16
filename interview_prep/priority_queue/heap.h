@@ -35,13 +35,20 @@ typedef struct {
 } heap_node_t;
 
 /**
- * @brief type definition for the struct type that will serve as a reference to
- * a heap in memory.
+ * @brief type definition for the struct type that will serve as the main
+ * interface to the underlying heap.
+ * 
+ * node_array: pointer to the first node in an array of heap nodes.
  * 
  */
 typedef struct {
-    heap_node_t *root;
+    heap_node_t *node_array;
 } heap_t;
+
+typedef enum {
+    SUCCESS = 0,
+    FAILURE = 1
+} heap_response_t;
 
 /**
  * @brief Initializes a new heap.
