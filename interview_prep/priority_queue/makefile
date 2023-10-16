@@ -11,7 +11,7 @@ OBJECT_FILES = main.o test.o
 prog: main.o
 	$(LINK) $(FLAGS) $^ -o $(EXECUTABLE)
 
-unittest: test.o
+unittest: test.o heap.o
 	$(LINK) $(FLAGS) $^ -o $(TEST_EXECUTABLE)
 
 test: unittest
